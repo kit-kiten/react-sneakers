@@ -1,162 +1,70 @@
+import React from "react";
 import Header from "./components/Header";
 import SneakersItem from "./components/SneakersItem";
 import Drawer from "./components/Drawer";
 
+
 function App() {
-  return (
-    <div className="wrapper clear">
-        <Drawer />
+    const [sneakersList, setSneakersList] = React.useState([]);
+    const [sneakersInDrawer, setSneakersInDrawer] = React.useState([]);
+    const [drawerOpened, setDrawerOpened] = React.useState(false);
+    const [searchInput, setSearchInput] = React.useState('');
 
-        <Header />
+    const onAddToDrawer = (obj) => {
+        setSneakersInDrawer(prev => [
+            ...prev,
+            obj
+        ])
+    }
 
-        <section className="sneakers">
-            <div className="sneakers__top d-flex justify-between">
-                <h2 className="sneakers__title">
-                    Все кроссовки
-                </h2>
+    const onChangeSearchInput = (event) => {
+        setSearchInput(event.target.value);
+    }
 
-                <form action="#" className="search d-flex align-center">
-                    <img width={15} height={15} src="./images/icons/search.svg" alt="search icon"/>
-                    <input type="text" className="search__input" placeholder='Поиск...'/>
-                </form>
-            </div>
-            <div className="sneakers__list d-flex justify-between flex-wrap">
-                <SneakersItem />
+    const onClearSearch = () => {
+        setSearchInput('')
+    }
 
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/2.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Мужские Кроссовки Nike Air Max 270
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>12 999 руб.</span>
-                        </div>
-                        <button className="sneakers__btn-add sneakers__btn-add--checked">
-                            <img src="./images/icons/checked.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
+    React.useEffect(() => {
+        fetch('https://62fb8ccde4bcaf5351878218.mockapi.io/items').then(response => {
+            return response.json()
+        }).then(json => {
+            setSneakersList(json)
+        })
+    }, [])
 
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/3.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Мужские Кроссовки Nike Blazer Mid Suede
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>8 499 руб.</span>
-                        </div>
-                        <button className="sneakers__btn-add">
-                            <img src="./images/add.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
+    return (
+        <div className="wrapper clear">
+            {drawerOpened && <Drawer items={sneakersInDrawer} onClose={() => setDrawerOpened(false)}/>}
+            <Header onClickDrawer={() => setDrawerOpened(true)}/>
 
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/4.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Кроссовки Puma X Aka Boku Future Rider
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>8 999 руб.</span>
-                        </div>
-                        <button className="sneakers__btn-add">
-                            <img src="./images/add.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
+             <section className="sneakers">
+                <div className="sneakers__top d-flex justify-between">
+                    <h2 className="sneakers__title">
+                        {searchInput ? `Поиск по запросу '${searchInput}':` : 'Все кроссовки'}
+                    </h2>
 
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/5.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Мужские Кроссовки Under Armour Curry 8
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>15 199 руб.</span>
-                        </div>
-                        <button className="sneakers__btn-add">
-                            <img src="./images/add.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
-
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/6.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Мужские Кроссовки Nike Kyrie 7
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>11 299 руб..</span>
-                        </div>
-                        <button className="sneakers__btn-add">
-                            <img src="./images/add.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
-
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/7.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Мужские Кроссовки Jordan Air Jordan 11
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>10 799 руб.</span>
-                        </div>
-                        <button className="sneakers__btn-add">
-                            <img src="./images/add.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
-
-                <li className="sneakers__item">
-                    <button className="sneakers__btn-like d-flex justify-center align-center">
-                        <img src="./images/icons/heart-unchecked.svg" alt="like icon"/>
-                    </button>
-                    <img width={133} height={112} src="./images/sneakers/8.jpg" alt="sneaker img"/>
-                    <h3 className="sneakers__item-title">
-                        Мужские Кроссовки Nike LeBron XVIII
-                    </h3>
-                    <div className="sneakers__inner">
-                        <div className="sneakers__text">
-                            Цена:
-                            <span>16 499 руб.</span>
-                        </div>
-                        <button className="sneakers__btn-add">
-                            <img src="./images/add.svg" alt="add img"/>
-                        </button>
-                    </div>
-                </li>
-            </div>
-        </section>
+                    <form action="#" className="search d-flex align-center pos-r">
+                        <img width={15} height={15} src="./images/icons/search.svg" alt="search icon"/>
+                        <input value={searchInput} onChange={onChangeSearchInput} type="text" className="search__input" placeholder='Поиск...'/>
+                        {
+                            searchInput && <button onClick={onClearSearch} className="search__btn-clear pos-a">
+                                                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                    <path d="M9.0799 7.61553L6.6311 5.16673L9.07982 2.71801C10.0241 1.77376 8.55964 0.309342 7.6154 1.25359L5.16668 3.70231L2.71787 1.2535C1.77384 0.309466 0.309467 1.77384 1.2535 2.71787L3.70231 5.16668L1.25359 7.61539C0.309343 8.55964 1.77376 10.0241 2.71801 9.07982L5.16673 6.6311L7.61553 9.0799C8.55969 10.0241 10.0241 8.55969 9.0799 7.61553Z" fill="#D3D3D3"/>
+                                                </svg>
+                                            </button>
+                        }
+                    </form>
+                </div>
+                <ul className="sneakers__list d-flex justify-between flex-wrap">
+                    {
+                        sneakersList.filter(item => item.title.toLowerCase().includes(searchInput.toLowerCase()))
+                            .map((obj, index) => (
+                                <SneakersItem key={index} title={obj.title} price={obj.price} urlImg={obj.urlImg} addToCard={onAddToDrawer}/>
+                                ))
+                    }
+                </ul>
+            </section>
     </div>
   );
 }

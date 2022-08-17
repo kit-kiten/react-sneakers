@@ -85,20 +85,23 @@ body {
     }
   }
 
-  &__btn-like{
+  &__btn-like,
+  &__btn-like--active{
+    border: none;
     background-color: transparent;
     width: 32px;
     height: 32px;
-    border: 1px solid #F8F8F8;
-    border-radius: 7px;
     position: absolute;
     cursor: pointer;
+    background-position: center;
+  }
+
+  &__btn-like{
+    background-image: url("../public/images/icons/heart-unchecked.svg");
   }
 
   &__btn-like--active{
-    background: #FEF0F0;
-    border-radius: 7px;
-    border: none;
+    background-image: url("../public/images/icons/heart-checked.svg");
   }
 
   &__item-title{
@@ -127,17 +130,24 @@ body {
     }
   }
 
-  &__btn-add{
+  &__btn-add,
+  &__btn-add--checked{
     background-color: transparent;
     border: 1px solid #F2F2F2;
     border-radius: 8px;
     width: 32px;
     height: 32px;
     cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &__btn-add{
+    background-image: url("../public/images/add.svg");
   }
 
   &__btn-add--checked{
-    background: linear-gradient(180deg, #89F09C 0%, #3CC755 100%)
+    background-image: url("../public/images/icons/checked.svg");
   }
 }
 
@@ -158,6 +168,16 @@ body {
     font-size: 14px;
     line-height: 17px;
     color: #C4C4C4;
+  }
+
+  &__btn-clear{
+    background-color: transparent;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #F2F2F2;
+    border-radius: 8px;
+    cursor: pointer;
+    right: 15px;
   }
 }
 

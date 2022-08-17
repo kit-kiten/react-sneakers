@@ -1,20 +1,32 @@
-function SneakersItem(){
+import React from "react";
+
+function SneakersItem({addToCard, title, price, urlImg}){
+    const [isAdded, setAdded] = React.useState(false);
+    const [isFavorite, setFavorite] = React.useState(false);
+
+    const handleClickAdd = () => {
+        addToCard({title, price, urlImg});
+        setAdded(!isAdded);
+    }
+
+    const handleClickFavorite = () => {
+        setFavorite(!isFavorite)
+    }
+
     return (
         <li className="sneakers__item">
-            <button className="sneakers__btn-like sneakers__btn-like--active d-flex justify-center align-center">
-                <img src="./images/icons/heart-checked.svg" alt="like icon"/>
+            <button className={isFavorite ? 'sneakers__btn-like--active' : 'sneakers__btn-like'} onClick={handleClickFavorite}>
             </button>
-            <img width={133} height={112} src="./images/sneakers/1.jpg" alt="sneaker img"/>
+            <img width={133} height={112} src={urlImg} alt="sneaker img"/>
             <h3 className="sneakers__item-title">
-                Мужские Кроссовки Nike Blazer Mid Suede
+                {title}
             </h3>
             <div className="sneakers__inner">
                 <div className="sneakers__text">
                     Цена:
-                    <span>12 999 руб.</span>
+                    <span>{price} руб.</span>
                 </div>
-                <button className="sneakers__btn-add">
-                    <img src="./images/add.svg" alt="add img"/>
+                <button className={isAdded ? 'sneakers__btn-add--checked' : 'sneakers__btn-add'} onClick={handleClickAdd}>
                 </button>
             </div>
         </li>

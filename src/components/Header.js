@@ -1,4 +1,4 @@
-function Header(){
+function Header(props){
     return (
         <header className="header d-flex justify-between align-center">
             <div className="d-flex">
@@ -14,7 +14,7 @@ function Header(){
 
             </div>
             <ul className="header__list">
-                <li className="header__list-item d-flex align-center">
+                <li className="header__list-item d-flex align-center cu-p" onClick={props.onClickDrawer}>
                     <img src="./images/icons/basket.svg" alt="icon"/>
                     <span className='pl-10'>1205 руб.</span>
                 </li>
