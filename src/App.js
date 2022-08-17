@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import Header from "./components/Header";
 import SneakersItem from "./components/SneakersItem";
 import Drawer from "./components/Drawer";
@@ -14,7 +15,14 @@ function App() {
         setSneakersInDrawer(prev => [
             ...prev,
             obj
-        ])
+        ]);
+
+        axios.post('https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer', obj);
+    }
+
+    const onDeleteFromDrawer = (id) => {
+        axios.delete(`https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer/${id}`);
+        setSneakersInDrawer(prev => prev.filter(item => item.id !== id))
     }
 
     const onChangeSearchInput = (event) => {
@@ -26,16 +34,18 @@ function App() {
     }
 
     React.useEffect(() => {
-        fetch('https://62fb8ccde4bcaf5351878218.mockapi.io/items').then(response => {
-            return response.json()
-        }).then(json => {
-            setSneakersList(json)
+        axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/items').then((response) => {
+            setSneakersList(response.data)
+        })
+
+        axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer').then((response) => {
+            setSneakersInDrawer(response.data)
         })
     }, [])
 
     return (
         <div className="wrapper clear">
-            {drawerOpened && <Drawer items={sneakersInDrawer} onClose={() => setDrawerOpened(false)}/>}
+            {drawerOpened && <Drawer items={sneakersInDrawer} onClose={() => setDrawerOpened(false)} onDelete={onDeleteFromDrawer}/>}
             <Header onClickDrawer={() => setDrawerOpened(true)}/>
 
              <section className="sneakers">

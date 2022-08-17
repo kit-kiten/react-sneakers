@@ -206,6 +206,46 @@ body {
     line-height: 29px;
   }
 
+  &__void{
+    max-width: 285px;
+    align-self: center;
+    margin: auto 0;
+  }
+
+  &__void-title{
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 27px;
+    margin: 20px 0 10px;
+  }
+
+  &__void-text{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    opacity: 0.4;
+    margin: 0 0 40px;
+    text-align: center;
+  }
+
+  &__void-btn{
+    width: 245px;
+    height: 55px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    background-color: #9DD458;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__void-arrow{
+    left: 25px;
+    top: 35%;
+  }
+
   &__list{
     flex: 1;
     overflow: auto;
@@ -264,6 +304,10 @@ body {
         fill: #B5B5B5;
       }
     }
+  }
+
+  &__bottom{
+    margin-top: auto;
   }
 
   &__bottom-list__item{
