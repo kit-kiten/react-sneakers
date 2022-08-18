@@ -1,8 +1,8 @@
 import React from "react";
 
-function SneakersItem({addToCard, title, price, urlImg}){
+function SneakersItem({addToCard, addToFavorite, id, title, price, urlImg, favorited= false}){
     const [isAdded, setAdded] = React.useState(false);
-    const [isFavorite, setFavorite] = React.useState(false);
+    const [isFavorite, setFavorite] = React.useState(favorited);
 
     const handleClickAdd = () => {
         addToCard({title, price, urlImg});
@@ -10,6 +10,7 @@ function SneakersItem({addToCard, title, price, urlImg}){
     }
 
     const handleClickFavorite = () => {
+        addToFavorite({id, title, price, urlImg})
         setFavorite(!isFavorite)
     }
 
