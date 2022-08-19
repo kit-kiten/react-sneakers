@@ -10,11 +10,13 @@ function Favorites({favorites, onAddToFavorite}){
                             <SneakersItem
                                 key={index}
                                 id={obj.id}
+                                parentId={obj.parentId}
                                 title={obj.title}
                                 price={obj.price}
                                 urlImg={obj.urlImg}
                                 addToFavorite={onAddToFavorite}
-                                favorited={true}/>
+                                loaded={true}
+                                favorited={favorites.some(item => item.parentId === obj.parentId)}/>
                         ))
                 }
             </ul>

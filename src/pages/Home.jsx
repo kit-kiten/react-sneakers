@@ -1,7 +1,32 @@
 import SneakersItem from "../components/SneakersItem";
 import React from "react";
 
-function Home({sneakersList, searchInput, onChangeSearchInput, onClearSearch, onAddToDrawer, onAddToFavorite}){
+function Home({sneakersList,
+              sneakersInDrawer,
+              searchInput,
+              onChangeSearchInput,
+              onClearSearch,
+              onAddToDrawer,
+              onAddToFavorite,
+              isLoaded})
+{
+    const renderItems = () => {
+        const filteredItems = sneakersList.filter(item => item.title.toLowerCase().includes(searchInput.toLowerCase()));
+        const fakeArray = new Array(12)
+
+        return (isLoaded ? filteredItems : [...fakeArray])
+                .map((obj, index) => (
+                    <SneakersItem
+                        key={index}
+                        addToCard={onAddToDrawer}
+                        addToFavorite={onAddToFavorite}
+                        added={sneakersInDrawer.some(item => item.parentId === obj.parentId)}
+                        loaded={isLoaded}
+                        {...obj}
+                    />
+                ))
+    }
+
     return (
         <section className="sneakers">
             <div className="sneakers__top d-flex justify-between">
@@ -23,10 +48,7 @@ function Home({sneakersList, searchInput, onChangeSearchInput, onClearSearch, on
             </div>
             <ul className="sneakers__list d-flex justify-between flex-wrap">
                 {
-                    sneakersList.filter(item => item.title.toLowerCase().includes(searchInput.toLowerCase()))
-                        .map((obj, index) => (
-                            <SneakersItem key={index} id={obj.id} title={obj.title} price={obj.price} urlImg={obj.urlImg} addToCard={onAddToDrawer} addToFavorite={onAddToFavorite}/>
-                        ))
+                   renderItems()
                 }
             </ul>
         </section>

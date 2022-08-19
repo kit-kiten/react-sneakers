@@ -19,7 +19,7 @@ function Drawer({onClose, onDelete, items=[]}){
                             <ul className="drawer__list mb-40">
                                 {
                                     items.map((item) => (
-                                        <li className="drawer__item">
+                                        <li className="drawer__item" key={item.id}>
                                             <img width={70} height={70} src={item.urlImg} alt="drawer"/>
                                             <div className="drawer__text">
                                                 {item.title}

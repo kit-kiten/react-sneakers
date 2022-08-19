@@ -8,6 +8,7 @@ import Drawer from "./components/Drawer";
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
 
+const AppContext = React.createContext({});
 
 function App() {
     const [sneakersList, setSneakersList] = React.useState([]);
@@ -15,25 +16,39 @@ function App() {
     const [favorites, setFavorites] = React.useState([]);
     const [drawerOpened, setDrawerOpened] = React.useState(false);
     const [searchInput, setSearchInput] = React.useState('');
+    const [isLoaded, setIsLoaded] = React.useState(false);
 
     const onAddToDrawer = (obj) => {
-        setSneakersInDrawer(prev => [
-            ...prev,
-            obj
-        ]);
+        if (sneakersInDrawer.find(item => item.parentId === obj.parentId)){
+            const numberInDrawer = sneakersInDrawer.findIndex(item => item.parentId === obj.parentId) + 1
 
-        axios.post('https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer', obj);
+            axios.delete(`https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer/${numberInDrawer}`);
+            setSneakersInDrawer(prev => prev.filter(item => item.parentId !== obj.parentId))
+        } else{
+            axios.post('https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer', obj);
+            setSneakersInDrawer(prev => [
+                ...prev,
+                obj
+            ]);
+        }
     }
 
     const onAddToFavorite = async (obj) => {
-        if (favorites.find(favObj => favObj.id === obj.id)){
-            axios.delete(`https://62fb8ccde4bcaf5351878218.mockapi.io/favorites/${obj.id}`)
-        } else{
-            const { data } = await axios.post('https://62fb8ccde4bcaf5351878218.mockapi.io/favorites', obj);
-            setFavorites(prev => [
-                ...prev,
-                data
-            ]);
+        try{
+            if (favorites.find(favObj => favObj.parentId === obj.parentId)){
+                const numberInFavorite = favorites.findIndex(favObj => favObj.parentId === obj.parentId) + 1
+
+                axios.delete(`https://62fb8ccde4bcaf5351878218.mockapi.io/favorites/${numberInFavorite}`)
+                setFavorites(prev => prev.filter(item => item.parentId !== obj.parentId))
+            } else{
+                const { data } = await axios.post('https://62fb8ccde4bcaf5351878218.mockapi.io/favorites', obj);
+                setFavorites(prev => [
+                    ...prev,
+                    data
+                ]);
+            }
+        } catch (err){
+            alert('Ошибка при добавлении в избранное');
         }
     }
 
@@ -51,17 +66,20 @@ function App() {
     }
 
     React.useEffect(() => {
-        axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/items').then((response) => {
-            setSneakersList(response.data)
-        })
+        async function fetchData() {
+            setIsLoaded(false);
+            const itemsResponse = await axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/items')
+            const drawerResponse = await axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer')
+            const favoritesResponse = await axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/favorites')
 
-        axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/itemsDrawer').then((response) => {
-            setSneakersInDrawer(response.data)
-        })
+            setIsLoaded(true);
 
-        axios.get('https://62fb8ccde4bcaf5351878218.mockapi.io/favorites').then((response) => {
-            setFavorites(response.data)
-        })
+            setFavorites(favoritesResponse.data)
+            setSneakersInDrawer(drawerResponse.data)
+            setSneakersList(itemsResponse.data)
+        }
+
+        fetchData();
     }, [])
 
     return (
@@ -74,11 +92,13 @@ function App() {
                 <Route path="/" exact element={
                     <Home
                         sneakersList={sneakersList}
+                        sneakersInDrawer={sneakersInDrawer}
                         searchInput={searchInput}
                         onChangeSearchInput={onChangeSearchInput}
                         onClearSearch={onClearSearch}
                         onAddToDrawer={onAddToDrawer}
                         onAddToFavorite={onAddToFavorite}
+                        isLoaded={isLoaded}
                     />}
                 />
 
